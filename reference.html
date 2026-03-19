@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEOFUTURE 2026 | SLRTCE</title>
+<!-- BEGIN: External Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<!-- END: External Scripts -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyberYellow: '#fffb00',
+            cyberBlack: '#050505',
+            cyberDark: '#101010',
+            glitchRed: '#ff003c',
+            glitchBlue: '#00f0ff',
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            cyber: ['Rajdhani', 'Orbitron', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+<style data-purpose="global-styles">    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
+
+    body {
+      background: transparent;
+      color: #fffb00;
+      font-family: 'JetBrains Mono', monospace;
+      overflow-x: hidden;
+      margin: 0;
+    }
+
+    #shutter-flash {
+      position: fixed;
+      inset: 0;
+      background: white;
+      opacity: 0;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.02));
+      z-index: 100;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+    .heartbeat-bg {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 251, 0, 0.05) 0%, transparent 70%);
+      animation: heartbeat 4s infinite ease-in-out;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); opacity: 0.2; }
+      10% { transform: scale(1.1); opacity: 0.4; }
+      20% { transform: scale(1.05); opacity: 0.3; }
+      30% { transform: scale(1.2); opacity: 0.5; }
+    }
+
+    .glitch-border {
+      border: 2px solid #fffb00;
+      box-shadow: 0 0 15px rgba(255, 251, 0, 0.4);
+      clip-path: polygon(0% 0%, 95% 0%, 100% 5%, 100% 100%, 5% 100%, 0% 95%);
+      position: relative;
+      overflow: hidden;
+      animation: border-jitter 10s infinite;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .glitch-border:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 30px rgba(255, 251, 0, 0.6), 5px 0 rgba(255,0,60,0.5), -5px 0 rgba(0,240,255,0.5);
+    }
+
+    @keyframes border-jitter {
+      0%, 95%, 100% { clip-path: polygon(0% 0%, 95% 0%, 100% 5%, 100% 100%, 5% 100%, 0% 95%); }
+      96% { clip-path: polygon(2% 0%, 98% 0%, 100% 10%, 100% 90%, 10% 100%, 0% 80%); }
+      98% { clip-path: polygon(0% 5%, 90% 0%, 100% 0%, 95% 100%, 0% 100%, 0% 10%); }
+    }
+
+    .extreme-glitch {
+      position: relative;
+    }
+    .extreme-glitch::before, .extreme-glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0.8;
+    }
+    .extreme-glitch:hover::before, .extreme-glitch.active-glitch::before {
+      animation: glitch-anim 0.3s infinite linear alternate-reverse;
+      color: #ff003c;
+      z-index: -1;
+      left: 3px;
+    }
+    .extreme-glitch:hover::after, .extreme-glitch.active-glitch::after {
+      animation: glitch-anim-2 0.3s infinite linear alternate-reverse;
+      color: #00f0ff;
+      z-index: -2;
+      left: -3px;
+    }
+
+    @keyframes glitch-anim {
+      0% { clip: rect(20px, 9999px, 10px, 0); transform: skew(0.5deg); }
+      100% { clip: rect(80px, 9999px, 40px, 0); transform: skew(0.8deg); }
+    }
+    @keyframes glitch-anim-2 {
+      0% { clip: rect(60px, 9999px, 30px, 0); transform: skew(-0.5deg); }
+      100% { clip: rect(10px, 9999px, 90px, 0); transform: skew(-0.8deg); }
+    }
+
+    .hologram-panel {
+      background: rgba(5, 5, 5, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 251, 0, 0.4);
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      transform-style: preserve-3d;
+      will-change: transform, opacity;
+    }
+
+    .blueprint-overlay {
+      position: absolute;
+      inset: -100px;
+      background-image: 
+        linear-gradient(rgba(255, 251, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 251, 0, 0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .central-void {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40vw;
+      height: 80vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    /* Ultra Boot Sequence Styles */
+    #boot-sequence {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      overflow: hidden;
+    }
+
+    .boot-reticle {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border: 1px solid rgba(255, 251, 0, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .boot-reticle::before {
+      content: '';
+      position: absolute;
+      width: 110%;
+      height: 110%;
+      border: 2px dashed rgba(255, 251, 0, 0.1);
+      border-radius: 50%;
+      animation: spin 10s linear infinite;
+    }
+
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .data-stream {
+      position: absolute;
+      font-size: 8px;
+      color: #fffb00;
+      opacity: 0.3;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .terminal-output {
+      height: 180px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 600px;
+      color: #fffb00;
+      font-size: 11px;
+      opacity: 0.9;
+      mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+      z-index: 10;
+    }
+
+    .scan-line-text::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 100%;
+      background: linear-gradient(transparent, rgba(255, 251, 0, 0.4), transparent);
+      animation: scan 4s linear infinite;
+    }
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    #floating-hero-group {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 5;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .floating-text-item {
+      position: absolute;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #fffb00;
+      text-align: center;
+      width: 100%;
+    }
+
+    .font-cyber {
+      text-shadow: 0 0 10px rgba(0, 0, 0, 1), 0 0 5px rgba(255, 251, 0, 0.3);
+    }
+
+    .shadow-text {
+      text-shadow: 0 0 30px rgba(255, 251, 0, 0.7);
+    }
+
+    .countdown-box {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 251, 0, 0.4);
+      padding: 0.5rem 1rem;
+      min-width: 80px;
+      transition: all 0.3s ease;
+    }
+    .countdown-box:hover {
+      background: rgba(255, 251, 0, 0.2);
+      border-color: #fffb00;
+      box-shadow: 0 0 15px rgba(255, 251, 0, 0.5);
+    }
+
+    .glowing-box {
+      box-shadow: 0 0 20px rgba(255, 251, 0, 0.4), inset 0 0 10px rgba(255, 251, 0, 0.1);
+      border: 1px solid rgba(255, 251, 0, 0.6);
+    }
+
+    .interactive-module {
+      transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+      position: relative;
+    }
+    .interactive-module:hover {
+      background: rgba(255, 251, 0, 0.15) !important;
+      transform: translateY(-5px) scale(1.02);
+      z-index: 10;
+    }
+    .interactive-module:hover::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border: 1px solid rgba(255, 251, 0, 0.5);
+      animation: pulse-border 1s infinite;
+    }
+
+    @keyframes pulse-border {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.1); }
+    }
+
+    .button-glitch:hover {
+      text-shadow: 2px 0 #ff003c, -2px 0 #00f0ff;
+      animation: jitter 0.1s infinite;
+    }
+    @keyframes jitter {
+      0% { transform: translate(0); }
+      25% { transform: translate(1px, 1px); }
+      50% { transform: translate(-1px, -1px); }
+      75% { transform: translate(1px, -1px); }
+      100% { transform: translate(0); }
+    }
+  </style>
+</head>
+<body class="antialiased select-none overflow-hidden">
+<div class="fixed inset-0 -z-[10] bg-transparent" id="background-container"></div>
+<div id="shutter-flash"></div>
+<div class="heartbeat-bg"></div>
+<canvas id="particle-canvas"></canvas>
+<!-- BEGIN: Ultra Boot Sequence -->
+<div id="boot-sequence">
+<div class="boot-reticle" id="boot-reticle">
+<div class="w-32 h-32 border-4 border-cyberYellow/20 rounded-full flex items-center justify-center relative">
+<div class="absolute inset-0 border-t-4 border-cyberYellow rounded-full animate-spin"></div>
+<div class="text-cyberYellow text-[12px] font-black tracking-widest animate-pulse">INIT</div>
+</div>
+</div>
+<div class="absolute inset-0 overflow-hidden pointer-events-none" id="stream-container"></div>
+<div class="terminal-output mt-48 px-6" id="terminal-text"></div>
+<div class="absolute bottom-10 left-10 text-[10px] opacity-40 font-mono" id="boot-status">SYSTEM_CHECK: 0%</div>
+<div class="mt-8 text-cyberYellow font-black text-3xl tracking-[0.8em] hidden" id="system-online-alert">
+      NEOFUTURE_ACTIVE
+    </div>
+</div>
+<!-- END: Ultra Boot Sequence -->
+<!-- BEGIN: FloatingHero -->
+<div class="opacity-0" id="floating-hero-group">
+<div class="floating-text-item top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4" id="hero-seq-1">
+<div class="font-cyber text-4xl md:text-6xl font-black tracking-[0.2em] shadow-text extreme-glitch brightness-110" data-text="SLRTCE PRESENTS">SLRTCE PRESENTS</div>
+</div>
+<div class="floating-text-item top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 opacity-0" id="hero-seq-2">
+<div class="font-cyber text-2xl md:text-3xl font-black tracking-[0.1em] mb-2 drop-shadow-lg">Technically co-sponsored by</div>
+<div class="font-cyber text-3xl md:text-5xl font-black tracking-widest text-white shadow-text drop-shadow-xl">IEEE Maharashtra Section</div>
+</div>
+<div class="floating-text-item top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 opacity-0" id="hero-seq-3">
+<div class="font-cyber text-6xl md:text-9xl font-black tracking-tighter shadow-text extreme-glitch brightness-125" data-text="NEOFUTURE 2026">NEOFUTURE 2026</div>
+</div>
+</div>
+<!-- END: FloatingHero -->
+<!-- BEGIN: MainHeader -->
+<header class="fixed top-0 left-0 w-full z-[150] px-6 py-4 flex justify-between items-center border-b border-cyberYellow/20 bg-cyberBlack/90 backdrop-blur-2xl opacity-0 translate-y-[-100%]" id="main-header">
+<div class="flex items-center gap-4">
+<div class="flex gap-3 mr-2">
+<div class="w-10 h-10 glitch-border bg-cyberYellow/10 flex items-center justify-center border-cyberYellow/50 cursor-crosshair"><span class="text-[8px] opacity-60 font-black">LOGO_01</span></div>
+<div class="w-10 h-10 glitch-border bg-cyberYellow/10 flex items-center justify-center border-cyberYellow/50 cursor-crosshair"><span class="text-[8px] opacity-60 font-black">LOGO_02</span></div>
+</div>
+<div class="flex flex-col">
+<div class="text-xl font-black tracking-tighter italic extreme-glitch" data-text="NEOFUTURE">NEO<span class="text-white bg-cyberYellow px-1 text-cyberBlack">FUTURE</span></div>
+<span class="text-[7px] opacity-80 uppercase tracking-widest font-bold">Shree L.R Tiwari College of Engineering // Rahul Education // IEEE MAHARASHTRA</span>
+</div>
+</div>
+<nav class="hidden xl:flex gap-6 text-[9px] font-bold uppercase tracking-widest">
+<a class="hover:text-white transition-all button-glitch" href="#home">.Home</a>
+<a class="hover:text-white transition-all button-glitch" href="#about">.About</a>
+<a class="hover:text-white transition-all button-glitch" href="#timeline">.Timeline</a>
+<a class="hover:text-white transition-all button-glitch" href="#tracks">.Tracks</a>
+<a class="hover:text-white transition-all button-glitch" href="#prizes">.Prizes</a>
+<a class="hover:text-white transition-all button-glitch" href="#faq">.FAQ</a>
+</nav>
+<button class="bg-cyberYellow text-cyberBlack px-6 py-2 text-[10px] font-black uppercase skew-x-[-20deg] hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.7)] transition-all pointer-events-auto button-glitch corrupt-on-hover" data-text="DATA_CORRUPTED">
+<span class="inline-block skew-x-[20deg]">Register_Now</span>
+</button>
+</header>
+<!-- END: MainHeader -->
+<div class="central-void" id="void-zone"></div>
+<main class="scroll-container relative z-10 opacity-0" id="main-content">
+<!-- Spacer for Hero Sequence Scroll -->
+<section class="h-[300vh]" id="hero-trigger-spacer"></section>
+<!-- SECTION: COUNTDOWN & REGISTRATION (Flow element) -->
+<section class="min-h-screen flex flex-col items-center justify-center px-8 relative" id="registration">
+<div class="text-center opacity-100" id="hero-seq-4">
+<div class="flex flex-wrap justify-center gap-4 mb-8" id="hero-countdown">
+<div class="countdown-box"><div class="text-4xl md:text-6xl font-black" id="hero-days">00</div><div class="text-[10px] font-bold opacity-80">DAYS</div></div>
+<div class="countdown-box"><div class="text-4xl md:text-6xl font-black" id="hero-hours">00</div><div class="text-[10px] font-bold opacity-80">HOURS</div></div>
+<div class="countdown-box"><div class="text-4xl md:text-6xl font-black" id="hero-minutes">00</div><div class="text-[10px] font-bold opacity-80">MINUTES</div></div>
+<div class="countdown-box"><div class="text-4xl md:text-6xl font-black" id="hero-seconds">00</div><div class="text-[10px] font-bold opacity-80">SECONDS</div></div>
+</div>
+<div class="mt-8">
+<button class="bg-cyberYellow text-cyberBlack px-12 py-4 font-black uppercase skew-x-[-10deg] hover:scale-110 transition-transform button-glitch shadow-[0_0_20px_rgba(255,251,0,0.4)] corrupt-on-hover" data-text="DATA_CORRUPTED">
+            Initialize_Registration
+          </button>
+</div>
+</div>
+</section>
+<!-- SECTION: MANIFESTO / ABOUT -->
+<section class="min-h-screen flex items-center justify-start px-8 md:px-20" id="about">
+<div class="hologram-panel glitch-border p-10 max-w-2xl" id="panel-about">
+<div class="blueprint-overlay"></div>
+<h2 class="text-4xl font-black mb-6 flex items-center gap-3 scan-line-text extreme-glitch font-cyber" data-text="ABOUT_NEOFUTURE">
+<span class="w-2 h-8 bg-cyberYellow"></span>
+          ABOUT_NEOFUTURE
+        </h2>
+<p class="text-sm leading-relaxed mb-6 font-bold text-white/95">
+          Organized by the Department of Computer Engineering at Shree L.R Tiwari College of Engineering, NEOFUTURE 2026 is a premier 24-hour hybrid hackathon. Technically Co-Sponsored by IEEE Maharashtra Section, we invite the sharpest minds to architect the next era of digital civilization.
+        </p>
+<div class="grid grid-cols-2 gap-4 text-[10px] font-mono border-t border-cyberYellow/30 pt-6">
+<div class="interactive-module p-2 bg-cyberBlack/40">ORG: <span class="text-white font-black">COMP_DEPT_SLRTCE</span></div>
+<div class="interactive-module p-2 bg-cyberBlack/40">SPONSOR: <span class="text-white font-black">IEEE_MH_SECTION</span></div>
+<div class="interactive-module p-2 bg-cyberBlack/40">MODE: <span class="text-white font-black">HYBRID_UPLINK</span></div>
+<div class="interactive-module p-2 bg-cyberBlack/40">PRIZE: <span class="text-green-400 font-black">₹1,00,000+</span></div>
+</div>
+</div>
+</section>
+<!-- SECTION: FINANCE NODES -->
+<section class="min-h-[60vh] flex items-center justify-center px-8 md:px-20" id="finance">
+<div class="hologram-panel glitch-border p-8 w-full max-w-4xl" id="panel-finance">
+<div class="blueprint-overlay"></div>
+<h2 class="text-2xl font-black mb-6 flex items-center gap-3 scan-line-text extreme-glitch font-cyber" data-text="FINANCE_NODES">
+<span class="w-2 h-6 bg-cyberYellow"></span>
+          FINANCE_NODES
+        </h2>
+<div class="w-full h-64 glowing-box bg-cyberBlack/80 flex items-center justify-center border-dashed relative overflow-hidden group">
+<div class="absolute inset-0 bg-cyberYellow/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+<span class="text-[10px] tracking-[1em] opacity-40 uppercase z-10 font-black text-white">Awaiting_Data_Stream</span>
+</div>
+</div>
+</section>
+<!-- SECTION: TRACKS -->
+<section class="min-h-screen flex items-center justify-end px-8 md:px-20" id="tracks">
+<div class="hologram-panel glitch-border p-10 max-w-2xl" id="panel-tracks">
+<div class="blueprint-overlay"></div>
+<h2 class="text-4xl font-black mb-6 flex items-center gap-3 scan-line-text extreme-glitch font-cyber" data-text="MISSION_TRACKS">
+<span class="w-2 h-8 bg-cyberYellow"></span>
+          MISSION_TRACKS
+        </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="interactive-module bg-cyberBlack/60 p-4 border border-cyberYellow/20 hover:border-cyberYellow transition-all group cursor-pointer">
+<div class="text-cyberYellow font-black mb-1">TRACK_01</div>
+<div class="text-[10px] font-bold leading-tight group-hover:text-white text-white/90">Smart Campus &amp; Student Experience</div>
+</div>
+<div class="interactive-module bg-cyberBlack/60 p-4 border border-cyberYellow/20 hover:border-cyberYellow transition-all group cursor-pointer">
+<div class="text-cyberYellow font-black mb-1">TRACK_02</div>
+<div class="text-[10px] font-bold leading-tight group-hover:text-white text-white/90">Intelligent Systems, AI &amp; Gamified Experiences</div>
+</div>
+<div class="interactive-module bg-cyberBlack/60 p-4 border border-cyberYellow/20 hover:border-cyberYellow transition-all group cursor-pointer">
+<div class="text-cyberYellow font-black mb-1">TRACK_03</div>
+<div class="text-[10px] font-bold leading-tight group-hover:text-white text-white/90">Rural Innovation &amp; AgriTech</div>
+</div>
+<div class="interactive-module bg-cyberBlack/60 p-4 border border-cyberYellow/20 hover:border-cyberYellow transition-all group cursor-pointer">
+<div class="text-cyberYellow font-black mb-1">TRACK_04</div>
+<div class="text-[10px] font-bold leading-tight group-hover:text-white text-white/90">Cybersecurity, FinTech &amp; Digital Trust</div>
+</div>
+<div class="interactive-module bg-cyberBlack/60 p-4 border border-cyberYellow/20 hover:border-cyberYellow transition-all group cursor-pointer">
+<div class="text-cyberYellow font-black mb-1">TRACK_05</div>
+<div class="text-[10px] font-bold leading-tight group-hover:text-white text-white/90">HealthTech &amp; Wellbeing</div>
+</div>
+<div class="interactive-module bg-cyberBlack/60 p-4 border border-cyberYellow/20 hover:border-cyberYellow transition-all group cursor-pointer">
+<div class="text-cyberYellow font-black mb-1">TRACK_06</div>
+<div class="text-[10px] font-bold leading-tight group-hover:text-white text-white/90">Open Innovation</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: TIMELINE -->
+<section class="min-h-screen flex items-center justify-start px-8 md:px-20" id="timeline">
+<div class="hologram-panel glitch-border p-10 max-w-2xl" id="panel-timeline">
+<div class="blueprint-overlay"></div>
+<h2 class="text-4xl font-black mb-8 flex items-center gap-3 scan-line-text extreme-glitch font-cyber" data-text="OP_TIMELINE">
+<span class="w-2 h-8 bg-cyberYellow"></span>
+          OP_TIMELINE
+        </h2>
+<div class="space-y-6">
+<div class="relative pl-8 border-l-2 border-cyberYellow/30 group interactive-module py-4 bg-cyberBlack/40">
+<div class="absolute -left-[9px] top-4 w-4 h-4 bg-cyberYellow rotate-45 group-hover:scale-150 transition-transform shadow-[0_0_10px_rgba(255,251,0,0.5)]"></div>
+<h4 class="text-xl font-bold tracking-tighter text-white font-cyber">PHASE 01: IDEA_SUBMISSION (ONLINE)</h4>
+<p class="text-[10px] font-mono mb-2 text-cyberYellow font-black">ABSTRACT + PPT UPLOAD</p>
+<p class="text-xs font-bold leading-relaxed opacity-95 text-white/90">Initial screening of problem statements and project architectures.</p>
+</div>
+<div class="relative pl-8 border-l-2 border-cyberYellow/30 group interactive-module py-4 bg-cyberBlack/40">
+<div class="absolute -left-[9px] top-4 w-4 h-4 bg-cyberYellow rotate-45 group-hover:scale-150 transition-transform shadow-[0_0_10px_rgba(255,251,0,0.5)]"></div>
+<h4 class="text-xl font-bold tracking-tighter text-white font-cyber">PHASE 02: D-DAY (10 APRIL 2026)</h4>
+<p class="text-[10px] font-mono mb-2 text-cyberYellow font-black">24-HOUR HACKATHON LIVE</p>
+<div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[9px] font-bold mt-2 text-white/80">
+<span>09:00 AM: REPORTING</span> <span>10:00 AM: OPENING</span>
+<span>11:00 AM: START_HACK</span> <span>07:00 PM: EVAL_R1</span>
+<span>10:00 PM: DAY_1_END</span> <span>D2 10:00 AM: PRIZE</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: PRIZE POOL -->
+<section class="min-h-screen flex flex-col items-center justify-center px-6" id="prizes">
+<div class="hologram-panel glitch-border p-12 text-center max-w-4xl" id="panel-prizes">
+<div class="blueprint-overlay"></div>
+<h2 class="text-2xl font-black tracking-[0.5em] mb-4 opacity-70 text-white font-cyber">NETWORK_REWARDS</h2>
+<div class="text-7xl md:text-9xl font-black mb-4 tracking-tighter extreme-glitch font-cyber drop-shadow-2xl" data-text="₹99,999+">₹<span id="prize-counter">0</span>+ <span class="text-2xl md:text-4xl block mt-2 opacity-90 uppercase tracking-normal">from 6 tracks</span></div>
+<p class="text-[10px] font-mono uppercase tracking-[0.4em] opacity-90 font-black text-white/80">Accumulated Bounty Pool for Innovation Architects</p>
+<div class="mt-12 grid grid-cols-3 gap-8">
+<div class="border-t border-cyberYellow/30 pt-4 interactive-module bg-cyberBlack/40">
+<div class="text-3xl font-black text-white">01</div>
+<div class="text-[8px] font-bold text-cyberYellow">WINNER_PRIZE</div>
+</div>
+<div class="border-t border-cyberYellow/30 pt-4 interactive-module bg-cyberBlack/40">
+<div class="text-3xl font-black text-white">02</div>
+<div class="text-[8px] font-bold text-cyberYellow">RUNNER_UP</div>
+</div>
+<div class="border-t border-cyberYellow/30 pt-4 interactive-module bg-cyberBlack/40">
+<div class="text-3xl font-black text-white">03</div>
+<div class="text-[8px] font-bold text-cyberYellow">DOMAIN_BEST</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: FAQ -->
+<section class="min-h-screen flex items-center justify-center px-8" id="faq">
+<div class="hologram-panel glitch-border p-10 w-full max-w-3xl" id="panel-faq">
+<div class="blueprint-overlay"></div>
+<h2 class="text-4xl font-black mb-8 flex items-center gap-3 scan-line-text extreme-glitch font-cyber" data-text="SYSTEM_FAQ">
+<span class="w-2 h-8 bg-cyberYellow"></span>
+          SYSTEM_FAQ
+        </h2>
+<div class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
+<div class="border border-cyberYellow/30 p-4 bg-cyberBlack/60 interactive-module">
+<div class="font-black text-[10px] text-cyberYellow mb-1 uppercase">Q: Who is eligible?</div>
+<div class="text-[11px] font-bold text-white">Open to all college students from recognized institutions.</div>
+</div>
+<div class="border border-cyberYellow/30 p-4 bg-cyberBlack/60 interactive-module">
+<div class="font-black text-[10px] text-cyberYellow mb-1 uppercase">Q: What is the team size?</div>
+<div class="text-[11px] font-bold text-white">Teams must consist of 2 to 4 members.</div>
+</div>
+<div class="border border-cyberYellow/30 p-4 bg-cyberBlack/60 interactive-module">
+<div class="font-black text-[10px] text-cyberYellow mb-1 uppercase">Q: Is there a registration fee?</div>
+<div class="text-[11px] font-bold text-white">A processing fee of ₹500 is required per team.</div>
+</div>
+<div class="border border-cyberYellow/30 p-4 bg-cyberBlack/60 interactive-module">
+<div class="font-black text-[10px] text-cyberYellow mb-1 uppercase">Q: Mode of hackathon?</div>
+<div class="text-[11px] font-bold text-white">The event is conducted in Hybrid mode (Online + In-person).</div>
+</div>
+<div class="border border-cyberYellow/30 p-4 bg-cyberBlack/60 interactive-module">
+<div class="font-black text-[10px] text-cyberYellow mb-1 uppercase">Q: Will certificates be provided?</div>
+<div class="text-[11px] font-bold text-white">Yes, all participants will receive digital/physical certificates.</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: STATUS -->
+<section class="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-cyberBlack/70 backdrop-blur-2xl z-0"></div>
+<div class="relative z-10 text-center" id="panel-status">
+<h2 class="text-[12vw] font-black leading-none tracking-tighter italic text-transparent stroke-cyberYellow relative" style="-webkit-text-stroke: 2px #fffb00;">
+<span class="extreme-glitch brightness-125" data-text="READY">READY</span><br/>
+<span class="opacity-40 text-[8vw]">FOR_UPLINK</span>
+</h2>
+<div class="mt-12 flex flex-col items-center gap-6">
+<div class="w-80 h-[3px] bg-cyberYellow/20 overflow-hidden relative">
+<div class="absolute inset-0 bg-cyberYellow animate-[loading_2s_linear_infinite] shadow-[0_0_15px_rgba(255,251,0,0.8)]"></div>
+</div>
+<p class="text-[11px] font-mono tracking-[1em] animate-pulse text-cyberYellow/80 uppercase font-bold">NEURAL_SYNC_ESTABLISHED</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BEGIN: MainFooter -->
+<footer class="fixed bottom-0 left-0 w-full z-[150] px-6 py-4 flex flex-col md:flex-row justify-between items-center bg-cyberBlack/95 border-t border-cyberYellow/20 backdrop-blur-2xl gap-4 opacity-0 translate-y-[100%]" id="main-footer">
+<div class="flex flex-col">
+<div class="text-[8px] opacity-60 tracking-widest font-mono text-white">
+        NEOFUTURE 2026 // SLRTCE CAMPUS, MIRA ROAD-EAST, THANE-401 107
+      </div>
+<div class="text-[8px] opacity-90 font-bold mt-1 text-cyberYellow">
+        COMMS: +91 97028 87471 | +91 74011 11407
+      </div>
+</div>
+<div class="flex gap-6 items-center">
+<a class="text-[9px] font-bold hover:text-white transition-all uppercase tracking-[0.2em] relative group button-glitch text-white/80" href="#">
+        LinkedIn
+        <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-cyberYellow group-hover:w-full transition-all"></span>
+</a>
+<a class="text-[9px] font-bold hover:text-white transition-all uppercase tracking-[0.2em] relative group button-glitch text-white/80" href="#">
+        Instagram
+        <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-cyberYellow group-hover:w-full transition-all"></span>
+</a>
+<div class="h-6 w-[1px] bg-cyberYellow/40 mx-2"></div>
+<div class="text-[9px] font-mono text-cyberYellow bg-cyberYellow/20 px-2 py-1 font-black">V_2026.NEO</div>
+</div>
+</footer>
+<!-- END: MainFooter -->
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 1. ULTRA BOOT SEQUENCE
+    const terminalLines = [
+      "[INFO] INIT_KERNEL_v2.0.26_STABLE",
+      "[SYS] MOUNTING_NETWORK_DRIVES... OK",
+      "[SYS] ESTABLISHING_IEEE_LINK_SECURE (256-BIT AES)",
+      "[SYS] SCANNING_HARDWARE_PERIPHERALS...",
+      "[SYS] NEURAL_ENGINE_WAKEUP_SUCCESS",
+      "[SYS] FRAGMENT_ASSEMBLY_MODE: ALPHA",
+      "[INFO] SLRTCE_CORE_UPLINK: ONLINE",
+      "[SYS] LOADING_VIRTUAL_NEOFUTURE_V2026",
+      "[SYS] ANALYZING_TRACK_METRICS...",
+      "[SYS] PRIZE_POOL_VERIFIED: 100K_INR_BOUUNTY",
+      "[SYS] SCANNING_FOR_INNOVATORS...",
+      "[INFO] 420_POTENTIAL_TARGETS_ACQUIRED",
+      "[SYS] MAPPING_TRACK_RESOURCES",
+      "[SYS] PREPARING_NEO_INJECTION...",
+      "[READY] UPLINK_STANDBY"
+    ];
+
+    const terminalOutput = document.getElementById('terminal-text');
+    const bootSequence = document.getElementById('boot-sequence');
+    const streamContainer = document.getElementById('stream-container');
+    const bootStatus = document.getElementById('boot-status');
+    
+    function createDataStream() {
+      for (let i = 0; i < 20; i++) {
+        const stream = document.createElement('div');
+        stream.className = 'data-stream';
+        stream.style.left = `${Math.random() * 100}%`;
+        stream.style.top = `${Math.random() * 100}%`;
+        stream.textContent = Math.random().toString(16).substring(2, 20).toUpperCase();
+        streamContainer.appendChild(stream);
+        
+        gsap.to(stream, {
+          y: -200 - Math.random() * 500,
+          opacity: 0,
+          duration: 1 + Math.random() * 2,
+          repeat: -1,
+          ease: "none",
+          delay: Math.random() * 2
+        });
+      }
+    }
+
+    function typeTerminal() {
+      let i = 0;
+      createDataStream();
+      
+      const interval = setInterval(() => {
+        if (i < terminalLines.length) {
+          const p = document.createElement('p');
+          p.className = "mb-1 border-l-2 border-cyberYellow pl-2 bg-cyberYellow/10 py-1 font-black";
+          p.textContent = terminalLines[i];
+          terminalOutput.appendChild(p);
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+          
+          const progress = Math.round((i / terminalLines.length) * 100);
+          bootStatus.textContent = `SYSTEM_CHECK: ${progress}%`;
+          
+          gsap.to("#boot-reticle", { x: (Math.random()-0.5)*10, y: (Math.random()-0.5)*10, duration: 0.1 });
+          
+          i++;
+        } else {
+          clearInterval(interval);
+          bootStatus.textContent = `SYSTEM_CHECK: 100% - SUCCESS`;
+          showSystemOnline();
+        }
+      }, 150);
+    }
+
+    function showSystemOnline() {
+      gsap.set("#system-online-alert", { display: 'block' });
+      gsap.fromTo("#system-online-alert", 
+        { scale: 2, opacity: 0, filter: "blur(20px)" }, 
+        { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }
+      );
+      
+      setTimeout(() => {
+        gsap.to(bootSequence, { 
+          clipPath: "polygon(0 45%, 100% 45%, 100% 55%, 0 55%)",
+          duration: 0.4,
+          ease: "power4.inOut",
+          onComplete: () => {
+            gsap.to(bootSequence, {
+              clipPath: "polygon(0 50%, 100% 50%, 100% 50%, 0 50%)",
+              opacity: 0,
+              duration: 0.2,
+              onComplete: () => {
+                bootSequence.remove();
+                document.body.classList.remove('overflow-hidden');
+                initMainUI();
+              }
+            });
+          }
+        });
+      }, 1000);
+    }
+
+    // 2. PARTICLE ENGINE
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouse = { x: -500, y: -500 };
+
+    function initParticles() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particles = [];
+      for(let i = 0; i < 150; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          len: Math.random() * 20 + 5,
+          speed: Math.random() * 3 + 1,
+          opacity: Math.random() * 0.5 + 0.2,
+          color: Math.random() > 0.9 ? '#ff003c' : (Math.random() > 0.9 ? '#00f0ff' : '#fffb00')
+        });
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(p => {
+        p.y += p.speed;
+        if(p.y > canvas.height) p.y = -30;
+        
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        let driftX = 0;
+        let extraLen = 0;
+
+        if(dist < 300) {
+          const force = (1 - dist/300);
+          driftX = (dx / dist) * -30 * force;
+          extraLen = force * 20;
+          
+          if(dist < 100 && Math.random() > 0.95) {
+            ctx.beginPath();
+            ctx.strokeStyle = p.color;
+            ctx.globalAlpha = 0.3 * force;
+            ctx.moveTo(p.x + driftX, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+          }
+        }
+
+        ctx.beginPath();
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = p.opacity;
+        ctx.moveTo(p.x + driftX, p.y);
+        ctx.lineTo(p.x + driftX, p.y + p.len + extraLen);
+        ctx.stroke();
+      });
+      requestAnimationFrame(drawParticles);
+    }
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      
+      const moveX = (e.clientX - window.innerWidth/2) / 100;
+      const moveY = (e.clientY - window.innerHeight/2) / 100;
+      gsap.to("main", { x: moveX, y: moveY, duration: 2, ease: "power1.out" });
+    });
+
+    window.addEventListener('resize', initParticles);
+    initParticles();
+    drawParticles();
+
+    // 3. COUNTDOWN ENGINE
+    const targetDate = new Date("April 10, 2026 09:00:00").getTime();
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+      if (distance < 0) return;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("hero-days").innerText = days.toString().padStart(2, '0');
+      document.getElementById("hero-hours").innerText = hours.toString().padStart(2, '0');
+      document.getElementById("hero-minutes").innerText = minutes.toString().padStart(2, '0');
+      document.getElementById("hero-seconds").innerText = seconds.toString().padStart(2, '0');
+    }
+    setInterval(updateCountdown, 1000);
+
+    // 4. UI INITIALIZATION
+    function initMainUI() {
+      gsap.to("#main-header", { opacity: 1, y: 0, duration: 1.5, ease: "expo.out" });
+      gsap.to("#main-footer", { opacity: 1, y: 0, duration: 1.5, ease: "expo.out", delay: 0.3 });
+      gsap.to("#main-content", { opacity: 1, duration: 2 });
+      gsap.to("#floating-hero-group", { opacity: 1, duration: 2 });
+      
+      setupAnimations();
+    }
+
+    function setupAnimations() {
+      // Sequence scroll for the fixed hero titles
+      const tlHero = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#hero-trigger-spacer",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1.5,
+        }
+      });
+
+      tlHero.to("#hero-seq-1", { opacity: 0, y: -80, filter: "blur(20px)", duration: 1 });
+      
+      tlHero.fromTo("#hero-seq-2", 
+        { opacity: 0, y: 80, filter: "blur(20px)" }, 
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, 
+        "-=0.5"
+      );
+      tlHero.to("#hero-seq-2", { opacity: 0, y: -80, filter: "blur(20px)", duration: 1, delay: 0.5 });
+
+      tlHero.fromTo("#hero-seq-3", 
+        { opacity: 0, scale: 0.5, filter: "blur(30px)" }, 
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1, onStart: () => {
+            const el = document.getElementById('hero-seq-3').querySelector('div');
+            if(el) el.classList.add('active-glitch');
+        }}, 
+        "-=0.5"
+      );
+      tlHero.to("#hero-seq-3", { opacity: 0, scale: 1.5, filter: "blur(30px)", duration: 1, delay: 0.5 });
+
+      // The registration block is now IN THE FLOW (inside <main>), 
+      // so we just animate it as it scrolls into view normally.
+      gsap.from("#hero-seq-4", {
+        scrollTrigger: {
+          trigger: "#registration",
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        },
+        opacity: 0,
+        y: 100,
+        duration: 1.2,
+        ease: "power4.out"
+      });
+
+      ScrollTrigger.create({
+        trigger: "body",
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: (self) => {
+          const vel = Math.abs(self.getVelocity());
+          if(vel > 2500) {
+            gsap.fromTo("#shutter-flash", { opacity: 0.2 }, { opacity: 0, duration: 0.3 });
+          }
+        }
+      });
+
+      const panels = document.querySelectorAll('.hologram-panel');
+      panels.forEach(panel => {
+        window.addEventListener('mousemove', (e) => {
+          const rect = panel.getBoundingClientRect();
+          if(rect.top < window.innerHeight && rect.bottom > 0) {
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const moveX = (e.clientX - centerX) / 80;
+            const moveY = (e.clientY - centerY) / 80;
+            gsap.to(panel, { rotateY: moveX, rotateX: -moveY, x: moveX/2, y: moveY/2, duration: 1, ease: "power2.out" });
+          }
+        });
+      });
+
+      const sections = ['about', 'finance', 'tracks', 'timeline', 'prizes', 'faq'];
+      sections.forEach((s, idx) => {
+        const panel = document.querySelector(`#panel-${s}`);
+        if(!panel) return;
+        const isEven = idx % 2 === 0;
+
+        gsap.fromTo(panel, 
+          { opacity: 0, x: isEven ? -150 : 150, scale: 0.8, filter: "blur(30px)", rotateY: isEven ? -20 : 20 },
+          {
+            scrollTrigger: {
+              trigger: `#${s}`,
+              start: "top 90%",
+              once: true,
+            },
+            opacity: 1,
+            x: 0,
+            scale: 1,
+            filter: "blur(0px)",
+            rotateY: 0,
+            duration: 2,
+            ease: "expo.out"
+          }
+        );
+      });
+
+      initPrizeCounter();
+    }
+
+    function initPrizeCounter() {
+      const prizeElement = document.getElementById('prize-counter');
+      const targetValue = 99999;
+      const counterProxy = { value: 0 };
+
+      gsap.to(counterProxy, {
+        value: targetValue,
+        duration: 4,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: "#panel-prizes",
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        onUpdate: () => {
+          prizeElement.textContent = Math.floor(counterProxy.value).toLocaleString();
+          if (Math.random() > 0.8) {
+            prizeElement.style.color = '#ff003c';
+            setTimeout(() => prizeElement.style.color = '#fffb00', 50);
+          }
+        }
+      });
+    }
+
+    window.addEventListener('load', typeTerminal);
+  </script>
+<style data-purpose="animations">
+    @keyframes loading {
+      0% { transform: translateX(-100%) skewX(-20deg); }
+      100% { transform: translateX(200%) skewX(-20deg); }
+    }
+    
+    .stroke-cyberYellow {
+      -webkit-text-stroke: 2px #fffb00;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 251, 0, 0.05);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #fffb00;
+      box-shadow: 0 0 10px #fffb00;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .interactive-module:hover::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 3px;
+      background: #fffb00;
+      box-shadow: 0 0 15px #fffb00;
+      animation: rescan 1.5s infinite linear;
+      z-index: 5;
+    }
+    @keyframes rescan {
+      0% { top: 0%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+  
+    .corrupt-on-hover {
+      transition: background 0.1s, color 0.1s;
+      position: relative;
+      overflow: hidden;
+    }
+    .corrupt-on-hover:hover {
+      background: #ff0000 !important;
+      color: transparent !important;
+      box-shadow: 0 0 30px #ff0000, 5px 0 #00f0ff, -5px 0 #ff003c !important;
+      animation: heavy-glitch-shake 0.1s infinite, flicker 0.15s infinite;
+    }
+    .corrupt-on-hover:hover::after {
+      content: 'DATA_CORRUPTED';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: inherit;
+      font-weight: 900;
+      text-shadow: 2px 0 #00f0ff, -2px 0 #ff003c;
+      animation: chromatic-shift 0.2s infinite;
+      background: #ff0000;
+      z-index: 10;
+    }
+    @keyframes heavy-glitch-shake {
+      0% { transform: translate(0) skew(0); }
+      20% { transform: translate(-5px, 5px) skew(5deg); }
+      40% { transform: translate(5px, -5px) skew(-5deg); }
+      60% { transform: translate(-5px, -2px) skew(3deg); }
+      80% { transform: translate(2px, 5px) skew(-3deg); }
+      100% { transform: translate(0) skew(0); }
+    }
+    @keyframes chromatic-shift {
+      0% { text-shadow: 2px 0 #00f0ff, -2px 0 #ff003c; }
+      50% { text-shadow: -3px 0 #00f0ff, 3px 0 #ff003c; }
+      100% { text-shadow: 2px 0 #00f0ff, -2px 0 #ff003c; }
+    }
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+    </style>
+</body></html>
