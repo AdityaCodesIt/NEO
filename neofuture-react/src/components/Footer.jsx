@@ -12,11 +12,11 @@ const Footer = () => {
         </div>
       </div>
       <div className="flex flex-wrap justify-center gap-4 md:gap-6 items-center">
-        <a className="text-[9px] md:text-[11px] font-bold hover:text-cyberYellow transition-all uppercase tracking-[0.2em] relative group button-glitch text-cyberYellow/80" href="#">
+        <a className="text-[9px] md:text-[11px] font-bold hover:text-cyberYellow transition-all uppercase tracking-[0.2em] relative group button-glitch text-cyberYellow/80" href="https://www.linkedin.com/company/slrtcecollege/?originalSubdomain=in" target="_blank" rel="noopener noreferrer">
           LinkedIn
           <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-cyberYellow group-hover:w-full transition-all"></span>
         </a>
-        <a className="text-[9px] md:text-[11px] font-bold hover:text-cyberYellow transition-all uppercase tracking-[0.2em] relative group button-glitch text-cyberYellow/80" href="#">
+        <a className="text-[9px] md:text-[11px] font-bold hover:text-cyberYellow transition-all uppercase tracking-[0.2em] relative group button-glitch text-cyberYellow/80" href="https://www.instagram.com/slrtce/" target="_blank" rel="noopener noreferrer">
           Instagram
           <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-cyberYellow group-hover:w-full transition-all"></span>
         </a>
