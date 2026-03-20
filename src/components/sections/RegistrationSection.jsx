@@ -53,9 +53,15 @@ const RegistrationSection = () => {
           </div>
         </div>
         <div className="mt-6 md:mt-8">
-          <button className="bg-black text-cyberYellow border border-cyberYellow px-6 sm:px-8 md:px-12 py-3 md:py-4 text-xs sm:text-sm md:text-base font-black uppercase skew-x-[-10deg] hover:bg-cyberYellow hover:text-black hover:scale-110 transition-all button-glitch shadow-[0_0_20px_rgba(255,251,0,0.4)] corrupt-on-hover" data-text="DATA_CORRUPTED">
+          <a
+            href="https://neo-future-registration.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-black text-cyberYellow border border-cyberYellow px-6 sm:px-8 md:px-12 py-3 md:py-4 text-xs sm:text-sm md:text-base font-black uppercase skew-x-[-10deg] hover:bg-cyberYellow hover:text-black hover:scale-110 transition-all button-glitch shadow-[0_0_20px_rgba(255,251,0,0.4)] corrupt-on-hover inline-block"
+            data-text="DATA_CORRUPTED"
+          >
             Initialize_Registration
-          </button>
+          </a>
         </div>
       </div>
     </section>
